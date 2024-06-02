@@ -2,6 +2,7 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 import os
+import pandas as pd 
 
 ####Existing Buckets####################
 
@@ -46,6 +47,6 @@ file="tmdb_5000_movies.csv"
 ####################################################################################
 
 
-
-
+obj=s3.get_object(Bucket=s3_bucket,Key=file)
+print(obj)
 
