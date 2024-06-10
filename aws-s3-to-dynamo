@@ -47,10 +47,56 @@ file="tmdb_5000_movies.csv"
 
 ####################################################################################
 
-
+'''
 obj=s3.get_object(Bucket=s3_bucket,Key=file)
 data=obj['Body'].read().decode('utf-8')
 
 df=pd.read_csv(StringIO(data))
+
+'''
+
+
+
+# Create a DynamoDB client
+dynamodb = boto3.client('dynamodb', region_name='ap-south-1')
+
+# Define the table schema
+table_definition = {
+    "TableName": "Movies",
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "id",
+            "AttributeType": "S"
+        }
+    ],
+    "KeySchema": [
+        {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+        }
+    ],
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 5,
+        "WriteCapacityUnits": 5
+    }
+}
+
+
+# Create the table
+def create_table():
+    try:
+        response = dynamodb.create_table(**table_definition)
+        print("Table creation started. Waiting for the table to be active...")
+        waiter = dynamodb.get_waiter('table_exists')
+        waiter.wait(TableName='Movies')
+        print("Table is now active.")
+    except Exception as e:
+        print(f"Error creating table: {e}")
+		
+		
+##if __name__ == "__main__":
+##    create_table()
+    
+
 
 
