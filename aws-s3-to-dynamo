@@ -76,8 +76,8 @@ table_definition = {
         }
     ],
     "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
     }
 }
 
